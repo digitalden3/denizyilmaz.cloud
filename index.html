@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="./style.css">
 </head>
-<body>
+<body onload="updateCounter()">
   <div class="overlay"></div>
   <div class="stars" aria-hidden="true"></div>
   <div class="starts2" aria-hidden="true"></div>
@@ -44,9 +44,26 @@
       </div>
     </section>
   </main>
+  <div style="text-align: center; margin-top: 630px;">
+    <span style="font-size: 20px;">Visits: <span id="hits"></span></span>
+  </div>
   <footer class="footer">
     <img src="Images/AWSLogo.png" alt="Your image description" style="width: 100px; height: auto;">
   </footer>
-  <script src="./script.js"></script>
+  <script>
+    function updateCounter(){
+      fetch('https://6p5yfig2i5.execute-api.eu-west-2.amazonaws.com/prod',{
+          method: 'GET'
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Something went wrong');
+        }
+      })
+      .then(data => document.getElementById('hits').innerText = data.Visit_Count);
+    }
+  </script>
 </body>
 </html>
