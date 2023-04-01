@@ -4,8 +4,8 @@
   <!-- Font Awesome 5.15.1 CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
   <meta charset="UTF-8">
-  <title>Deniz Yilmaz | Cloud Engineer</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deniz Yilmaz | Digital Den</title>
+  <meta name="viewport" content="width=device-width, initial-scale=0.85">
   <link rel="stylesheet" href="./style.css">
 </head>
 <body onload="updateCounter()">
@@ -16,7 +16,7 @@
   <main class="main">
     <section class="contact">
       <div class="header">
-        <img src="Images/DenizTransparent.png" alt="Your image description">
+        <img src="Images/digitalden.png" alt="Your image description">
         <h1 class="title">Deniz Yilmaz | Digital Den</h1>
       </div>
       <h2 class="sub-title">Cloud Engineer</h2>
@@ -44,12 +44,12 @@
       </div>
     </section>
   </main>
-  <div style="text-align: center; margin-top: 630px;">
+  <div style="text-align: center; margin-top: 690px;">
     <span style="font-size: 20px;">Visits: <span id="hits"></span></span>
   </div>
-  <footer class="footer">
-    <img src="Images/AWSLogo.png" alt="Your image description" style="width: 100px; height: auto;">
-  </footer>
+  <div class="aws-logo">
+    <img src="Images/AWSLogo.png" alt="Your image description" style="width: 80px; height: auto;">
+  </div>
   <script>
     function updateCounter(){
       fetch('https://6p5yfig2i5.execute-api.eu-west-2.amazonaws.com/prod',{
@@ -65,5 +65,6 @@
       .then(data => document.getElementById('hits').innerText = data.Visit_Count);
     }
   </script>
+  <footer class="footer">
+  </footer>
 </body>
-</html>
