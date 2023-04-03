@@ -1,1 +1,1 @@
-# denizyilmaz.cloud
+# digitalden.cloud
