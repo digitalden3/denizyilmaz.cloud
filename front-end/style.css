@@ -21,8 +21,7 @@ body {
 	top: 0;
 	left: 0;
 	overflow: hidden;
-	position: fixed;
-    width: 100%;
+
 }
 
 .main {
@@ -161,17 +160,13 @@ body {
 }
 
 .footer {
-	position: fixed;
+	position: absolute;
 	left: 0;
-	bottom: 10px;
+	bottom: 0px;
 	text-align: center;
 	width: 100%;
   }
   
-  .footer img {
-	max-width: 70px;
-	margin-top: -20px;
-  }
   .aws-logo {
 	position: relative;
 	left: 50%;
@@ -180,8 +175,10 @@ body {
 	z-index: 1;
 	width: 80px;
 	height: auto;
-	margin-top: 10px;
+	margin-top: 5px;
+	margin-bottom: 10px;
 }
+
   
 /* CSS hack using multiple box-shadows to get them **Stars** */
 
