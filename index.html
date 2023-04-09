@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+  
 <head>
   <!-- HTML Meta Tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Deniz Yilmaz | Digital Den</title>
   <meta name="description" content="AWS Certified Cloud Engineer">
 
@@ -22,59 +25,69 @@
     
   <!-- Font Awesome 5.15.1 CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-  <meta charset="UTF-8">
-  <title>Deniz Yilmaz | Digital Den</title>
-
-  <!-- Viewport -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- CSS Style Sheet -->
   <link rel="stylesheet" href="./style.css">
 </head>
+
 <body onload="updateCounter()">
   <div class="overlay"></div>
+
+  <!-- Star Background -->
   <div class="stars" aria-hidden="true"></div>
   <div class="starts2" aria-hidden="true"></div>
   <div class="stars3" aria-hidden="true"></div>
-  <main class="main">
-    <section class="contact">
-      <div class="header">
-        <img src="Images/digitalden.png" alt="Your image description">
-        <h1 class="title">Deniz Yilmaz</h1>
-      </div>
-      <h2 class="sub-title">Cloud Engineer</h2>
-      <div class="wrapper">
-        <a href="https://www.linkedin.com/in/digitalden/" class="icon linkedin" target="_blank">
-          <div class="tooltip">LinkedIn</div>
-          <span><i class="fab fa-linkedin"></i></span>
-        </a>
-        <a href="https://blog.digitalden.cloud/" class="icon medium" target="_blank">
-          <div class="tooltip">Portfolio</div>
-          <span><i class="fab fa-medium"></i></span>
-        </a>
-        <a href="https://www.credly.com/users/denizyilmaz-ce/badges" class="icon aws" target="_blank">
-          <div class="tooltip">Certs</div>
-          <span><i class="fab fa-aws"></i></span>
-        </a>
-        <a href="https://github.com/digitalden3" class="icon github" target="_blank">
-          <div class="tooltip">Github</div>
-          <span><i class="fab fa-github"></i></span>
-        </a>
-        <a href="https://www.youtube.com/@digitalden3" class="icon youtube" target="_blank">
-          <div class="tooltip">Labs</div>
-          <span><i class="fab fa-youtube"></i></span>
-        </a>
-      </div>
-    </section>
-  </main>
+
+<!-- Main Content -->
+<main class="main">
+  <section class="contact">
+    <div class="header">
+      <img src="Images/digitalden.png" alt="Portrait of Digital Den">
+      <h1 class="title">Deniz Yilmaz</h1>
+    </div>
+    <h2 class="sub-title">Cloud Engineer</h2>
+    
+    <div class="wrapper">
+      <a href="https://www.linkedin.com/in/digitalden/" class="icon linkedin" target="_blank">
+        <div class="tooltip">LinkedIn</div>
+        <span><i class="fab fa-linkedin"></i></span>
+      </a>
+      
+      <a href="https://blog.digitalden.cloud/" class="icon medium" target="_blank">
+        <div class="tooltip">Portfolio</div>
+        <span><i class="fab fa-medium"></i></span>
+      </a>
+      
+      <a href="https://www.credly.com/users/denizyilmaz-ce/badges" class="icon aws" target="_blank">
+        <div class="tooltip">Certs</div>
+        <span><i class="fab fa-aws"></i></span>
+      </a>
+      
+      <a href="https://github.com/digitalden3" class="icon github" target="_blank">
+        <div class="tooltip">Github</div>
+        <span><i class="fab fa-github"></i></span>
+      </a>
+      
+      <a href="https://www.youtube.com/@digitalden3" class="icon youtube" target="_blank">
+        <div class="tooltip">Labs</div>
+        <span><i class="fab fa-youtube"></i></span>
+      </a>
+      
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
   <footer class="footer">
     <div style="text-align: center;">
       <span style="font-size: 20px;">Visits: <span id="hits"></span></span>
     </div>
     <div class="aws-logo">
-      <img src="Images/AWSLogo.png" alt="Your image description" style="width: 80px; height: auto;">
+      <img src="Images/AWSLogo.png" alt="AWS Logo" style="width: 80px; height: auto;">
     </div>
   </footer>
+
+  <!-- Update Counter JS -->
   <script>
     function updateCounter(){
       fetch('https://6p5yfig2i5.execute-api.eu-west-2.amazonaws.com/prod',{
@@ -89,5 +102,7 @@
       })
       .then(data => document.getElementById('hits').innerText = data.Visit_Count);
     }
-  </script
+  </script>
+
 </body>
+</html>
