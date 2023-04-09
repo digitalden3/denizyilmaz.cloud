@@ -244,3 +244,66 @@ body {
 		transform: translateY(-2000px);
 	}
 }
+@media all 
+and (min-device-width : 540px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape)
+and (-webkit-min-device-pixel-ratio: 1){
+	.main {
+		position: initial;
+	}
+	.footer {
+		position: initial;
+		padding-top: 30px;
+	}
+	html{
+		overflow-y: scroll;
+		height: auto;
+	}
+	body{
+		position: initial;
+		height: auto;
+	}
+}
+@media all and (max-width:575px){
+	.wrapper .icon {
+		margin: 0px 6px;
+		width: 45px;
+		height: 45px;
+		line-height: 45px;
+		transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+		color: #333;
+		text-decoration: none;
+	}
+	.main {
+		margin-top: 25px;
+	}
+	.title {
+		font-size: 26px;
+	}
+}
+@media all and (max-width:365px){
+	.contact img {
+		max-width: 120px;
+	}
+	.title {
+		font-size: 23px;
+	}
+	.sub-title {
+		font-size: 1rem;
+	}
+	.wrapper .icon {
+		width: 40px;
+		height: 40px;
+		line-height: 40px;
+	}
+	.wrapper .icon {
+		font-size: 20px;
+	}
+	.footer span {
+		font-size: 18px !important;
+	}
+	.aws-logo img {
+		width: 55px !important;
+	}
+}
