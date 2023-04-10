@@ -7,7 +7,7 @@ Website porfolio built using AWS resources. Github actions workflow is used to a
 AWS credentials are stored in Github Action Secrets" rather than in my code for security reasons.
 
 # Architecture:
-![Architecture Diagram](/Images/AWS-Architecture.png)
+![Architecture Diagram](/Images/AWS-Architecture-2.png)
 
 
 **Tech-stack**:
