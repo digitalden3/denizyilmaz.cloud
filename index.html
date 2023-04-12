@@ -88,20 +88,14 @@
   </footer>
 
   <!-- Update Counter JS -->
-  <script>
-    function updateCounter(){
-      fetch('https://6p5yfig2i5.execute-api.eu-west-2.amazonaws.com/prod',{
-          method: 'GET'
-      })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Something went wrong');
-        }
-      })
-      .then(data => document.getElementById('hits').innerText = data.Visit_Count);
-    }
+  <script type = "text/javascript">
+    var apiUrl = "https://0qrguua9jg.execute-api.eu-west-2.amazonaws.com/Prod/put";
+      fetch(apiUrl)
+      .then(() => fetch("https://0qrguua9jg.execute-api.eu-west-2.amazonaws.com/Prod/get"))
+      .then(response => response.json())
+      .then(data =>{
+          document.getElementById('hits').innerHTML = data
+    console.log(data)});
   </script>
 
 </body>
