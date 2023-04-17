@@ -18,7 +18,21 @@
 
 </p>
 
-
+<details open="open">
+  <summary><h2 style="display: inline-block">Project Details</h2></summary>
+  <ol>
+    <li><a href="#tech-stack">Tech Stack</a>
+    <li><a href="#project-date">Project Date</a></li>
+    </li>
+    <li><a href="#project-description">Project Description</a></li>
+    <li><a href="#html-css">HTML / CSS</a></li>    
+    <li><a href="static-s3-website">Static S3 Website </a></li>
+    <li><a href="#https-and-dns">HTTPS and DNS </a></li>
+    <li><a href="#github-actions">Github Actions</a></li>
+    <li><a href="#javascript">JavaScript</a></li>
+    <li><a href="#acknowledgements">Acknowledgements</a></li>
+  </ol>
+</details>
 
 ### Tech Stack
 ------------------
@@ -26,44 +40,81 @@
 - AWS S3
 - AWS CloudFront
 - Certificate Manager
-- AWS Lambda
-- Dynamo DB
 - GitHub Actions
-- Java Script
-
-### Project Description
-------------------
-
-The architecture is deployed by using ClickOps and GitHub Actions as the CI/CD method.
-
-The backend components of the website support a counter of visitors to the website.  The data (visitor count value) is stored in a DynamoDB database, which is accessed by a Lambda function written in Python3.  The function is accessed through a REST API created with API Gateway, which when called will invoke the Lambda function and forward back the direct response due to a “Lambda proxy” configuration.  Each time the page is loaded, a short JavaScript script utilizes Fetch API to ping the endpoint of the counter API, before rendering the response in the footer of the page.  
-
-The website fetches and displays the latest visitor count, while the Lambda function handles incrementation as it interacted exclusively with the database.
+- JavaScript
 
 ### Project date
 ------------------
 16.04-2023
 
+### Project Description
+------------------
 
-### HTML/CSS
+The architecture was deployed by using ClickOps and GitHub Actions as the CI/CD method.
+
+The backend components of the website support a counter of visitors to the website.  The data (visitor count value) is stored in a DynamoDB database, which is accessed by a Lambda function written in Python3.  The function is accessed through a REST API created with API Gateway, which when called will invoke the Lambda function and forward back the direct response due to a “Lambda proxy” configuration.  Each time the page is loaded, a short JavaScript script utilizes Fetch API to ping the endpoint of the counter API, before rendering the response in the footer of the page. The website fetches and displays the latest visitor count, while the Lambda function handles incrementation as it interacted exclusively with the database.
+
+### HTML / CSS
 ------------------ 
-Wrote website as a HTML webpage and used CSS for styling.
+Built a simple landing page that hosts multiple links. Website is written in HTML and styled in CSS.
 
 ### Static S3 Website 
 ------------------
 Created a S3 bucket and enabled bucket to host a static website. Uploaded index.html and stye.css (referenced in HTML) to the bucket.
 
-### 3. HTTPS & DNS 
+### HTTPS and DNS 
+------------------
 Registered domain at digitalden.cloud. Configured Amazon Route 53 to route traffic to digitalden.cloud
 
 Secured website using HTTPS protocol. Requested Public Certificates from AWS Certificate Manager. Configured a CloudFront distribution for root domain and subdomain. Updated A Records to route traffic to CloudFront distribution.
 
-### 6. CI/CD
- Implemented a CI/CD pipeline using GitHub Actions. Once code is pushed to GitHub repo, GitHub Actions will be triggered which will sync all code to S3 bucket. 
+### Github Actions
+------------------
+This project has a CI/CD pipeline on GitHub Actions workflow. It automates the deployment of files to an S3 bucket and the invalidation of the corresponding CloudFront distribution cache:
  
- Added code that invalidates CloudFront cache.
- 
-AWS credentials are stored in Github Action Secrets rather than in code for security.
+ ```bash
+name: Workflow for S3 Deploy and Invalidate Cache
+on: [push]
 
-### 7. Room For Growth
-Automate the front-end with IaC. AWS SAM / Terraform.
+jobs:
+  deploy-and-invalidate:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@master
+
+    # Upload to S3
+    - name: sync s3
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --exclude '.git*/*' --delete --follow-symlinks
+      env:
+        SOURCE_DIR: './'
+        AWS_REGION: 'eu-west-2'
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    # Invalidate Cloudfront
+    - name: invalidate
+      uses: chetan/invalidate-cloudfront-action@master
+      env:
+        DISTRIBUTION: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+        PATHS: '/*'
+        AWS_REGION: 'eu-west-2'
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+ ```
+
+The workflow is triggered by a push event and consists of a single job. The job checks out the code, uploads the files to the specified S3 bucket, and invalidates the CloudFront cache.
+
+![Deploy & Invalidate](resources/images/deploy-and-invalidate.png)
+
+ The AWS access key and secret access key are obtained from GitHub secrets and are stored in Github Action Secrets rather than in code for security.
+
+### Room For Growth
+Automate the architecture with IaC. AWS SAM / Terraform.
+
+### Acknowledgements
+------------------
+* [Cloud Resume Challenge](https://cloudresumechallenge.dev/)
