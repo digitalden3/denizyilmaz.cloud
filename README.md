@@ -47,6 +47,10 @@
 ------------------
 16.04-2023
 
+### Frontend Architecture
+------------------
+![Frontend Architecture](resources/images/front-end-architecture.png)
+
 ### Project Description
 ------------------
 
