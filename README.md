@@ -18,26 +18,7 @@
 
 </p>
 
-<details open="open">
-  <summary><h2 style="display: inline-block">Project Details</h2></summary>
-  <ol>
-    <li><a href="#tech-stack">Tech Stack</a>
-    <li><a href="#project-date">Project Date</a></li>
-    </li>
-    <li><a href="#project-description">Project Description</a></li>
-    <li><a href="#aws-sam-cli">AWS SAM CLI</a></li>    
-    <li><a href="#dynamodb">DynamoDB</a></li>
-    <li><a href="#lambda-function">Lambda Function</a></li>
-    <li><a href="#api-gateway">API Gateway</a></li>
-    <li><a href="#javascript">JavaScript</a></li>
-    <li><a href="#sam-local-invoke">SAM Local Invoke</a></li>
-    <li><a href="#github-actions">Github Actions</a></li>
-    <li><a href="#unit-testing">Unit Testing</a></li>
-    <li><a href="#integration-testing">Integration Testing</a></li>
-    <li><a href="#project-files">Project Files</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
-  </ol>
-</details>
+
 
 ### Tech Stack
 ------------------
