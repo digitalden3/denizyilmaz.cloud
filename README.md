@@ -6,7 +6,7 @@
   </a>
   <h1 align="center">A Serverless Website</h1>
   <p align="center">
-    Built on AWS using ClickOps and GitHub Actions for CI/CD.
+    This project was built on AWS and has a CI/CD pipeline on GitHub Actions workflow.
      <br />
     This is the front-end repo to the website:
     <br />
@@ -50,9 +50,11 @@
 ### Project Description
 ------------------
 
-The architecture was deployed by using ClickOps and GitHub Actions as the CI/CD method.
+The architecture was deployed by using the AWS Management Console and GitHub Actions was used for the CI/CD method.
 
-The backend components of the website support a counter of visitors to the website.  The data (visitor count value) is stored in a DynamoDB database, which is accessed by a Lambda function written in Python3.  The function is accessed through a REST API created with API Gateway, which when called will invoke the Lambda function and forward back the direct response due to a “Lambda proxy” configuration.  Each time the page is loaded, a short JavaScript script utilizes Fetch API to ping the endpoint of the counter API, before rendering the response in the footer of the page. The website fetches and displays the latest visitor count, while the Lambda function handles incrementation as it interacted exclusively with the database.
+I have recently made a dev branch and am currently working to automate this architecture with IaC (AWS SAM).
+
+The backend of this project has been deployed by AWS SAM and can be found [HERE](https://github.com/digitalden3/serverless-website-backend).
 
 ### HTML / CSS
 ------------------ 
