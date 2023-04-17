@@ -24,7 +24,7 @@
     <li><a href="#tech-stack">Tech Stack</a>
     <li><a href="#project-date">Project Date</a></li>
     </li>
-    li><a href="#frontend-architecture">Frontend Architecture</a></li>
+    <li><a href="#frontend-architecture">Frontend Architecture</a></li>
     <li><a href="#project-description">Project Description</a></li>
     <li><a href="#html-css">HTML / CSS</a></li>    
     <li><a href="static-s3-website">Static S3 Website </a></li>
