@@ -27,9 +27,9 @@ Resources:
         DefaultCacheBehavior:
           ViewerProtocolPolicy: allow-all
           TargetOriginId: denizyilmaz.cloud.s3-website.eu-west-2.amazonaws.com
-          DefaultTTL: 0
-          MinTTL: 0
-          MaxTTL: 0
+          DefaultTTL: 86400
+          MinTTL: 1
+          MaxTTL: 86400
           ForwardedValues:
             QueryString: false
         Origins:
