@@ -31,10 +31,21 @@ Resources:
             HostedZoneId: Z2FDTNDATAQYW2
             DNSName: !GetAtt MyDistribution.DomainName
 
+  MyCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: denizyilmaz.cloud
+      ValidationMethod: DNS
+
   MyDistribution:
     Type: "AWS::CloudFront::Distribution"
     Properties:
       DistributionConfig:
+        ViewerCertificate:
+          AcmCertificateArn: !Ref MyCertificate
+          SslSupportMethod: sni-only
+        Aliases:
+          - denizyilmaz.cloud
         DefaultCacheBehavior:
           ViewerProtocolPolicy: allow-all
           TargetOriginId: denizyilmaz.cloud.s3-website.eu-west-2.amazonaws.com
