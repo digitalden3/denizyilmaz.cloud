@@ -1,5 +1,8 @@
 name: Workflow for S3 Deploy and Invalidate Cache
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   deploy-and-invalidate:
