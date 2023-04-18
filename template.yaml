@@ -48,15 +48,15 @@ Resources:
           - denizyilmaz.cloud
         DefaultCacheBehavior:
           ViewerProtocolPolicy: allow-all
-          TargetOriginId: denizyilmaz.cloud.s3-website.eu-west-2.amazonaws.com
+          TargetOriginId: denizyilmaz.cloud.s3-website-us-east-1.amazonaws.com
           DefaultTTL: 86400
           MinTTL: 1
           MaxTTL: 86400
           ForwardedValues:
             QueryString: false
         Origins:
-          - DomainName: denizyilmaz.cloud.s3-website.eu-west-2.amazonaws.com
-            Id: denizyilmaz.cloud.s3-website.eu-west-2.amazonaws.com
+          - DomainName: denizyilmaz.cloud.s3-website-us-east-1.amazonaws.com
+            Id: denizyilmaz.cloud.s3-website-us-east-1.amazonaws.com
             CustomOriginConfig:
               OriginProtocolPolicy: match-viewer
         Enabled: true
