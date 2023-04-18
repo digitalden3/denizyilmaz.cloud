@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="img/">
-    <img src="resources/images/AWS-Architecture-2.png" alt="architecture">
+    <img src="website/resources/images/AWS-Architecture-2.png" alt="architecture">
   </a>
   <h1 align="center">A Serverless Website</h1>
   <p align="center">
