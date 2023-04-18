@@ -58,7 +58,7 @@
 
 The architecture was initially deployed by using the AWS Management Console and GitHub Actions was used for the CI/CD method.
 
-I have recently made a dev branch and fully automated this architecture with AWS SAM. Once I have finalized this README. I will merge the branches.
+I have recently made a [dev branch](https://github.com/digitalden3/serverless-website-frontend/tree/dev) and fully automated this architecture with AWS SAM. Once I have finalized this README. I will merge the branch with main.
 
 The backend of this project has also deployed by AWS SAM and can be found [HERE](https://github.com/digitalden3/serverless-website-backend).
 
