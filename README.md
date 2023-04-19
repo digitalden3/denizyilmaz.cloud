@@ -56,15 +56,18 @@
 ### Project Description
 ------------------
 
-The architecture was initially deployed by using the AWS Management Console and GitHub Actions was used for the CI/CD method.
+A simple landing page that hosts multiple links. Webpage is written in HTML/JavaScript and is styled in CSS.
 
-I have recently made a [dev branch](https://github.com/digitalden3/serverless-website-frontend/tree/dev) and fully automated this architecture with AWS SAM. Once I have finalized this README. I will merge the branch with main.
+Registered domain at digitalden.cloud. Configured Amazon Route 53 to route traffic to digitalden.cloud. Secured website using HTTPS protocol. Configured a CloudFront distribution for root domain and subdomain.
 
-The backend of this project has also deployed by AWS SAM and can be found [HERE](https://github.com/digitalden3/serverless-website-backend).
+Github Actions for CI/CD. Once code is pushed to Github repository, Github Actions is triggered, which syncs all code to an S3 bucket. There is also code that invalidates the Cloudfront cache.
+
+The webpage includes a visitor counter in the footer that displays how many people have accessed the site. There is a JavaScript code that makes this happen. More details about this can be found in the backend repository of this project, which can be found [HERE](https://github.com/digitalden3/serverless-website-backend).
+
+(The architecture was initially deployed by using the AWS Management Console, however I recently made a [dev branch](https://github.com/digitalden3/serverless-website-frontend/tree/dev) and fully automated this architecture with AWS SAM. Once I have finalized this README. I will merge the branch with main.)
 
 ### AWS SAM CLI
 ------------------
-
 The SAM CLI is a command line tool that used with AWS SAM templates to build and run serverless applications. It adds functionality for building and testing Lambda applications. It uses Docker to run the functions in an Amazon Linux environment that matches Lambda. It can also emulate the application's build environment and API.
 
 To use the SAM CLI, you need the following tools:
@@ -100,11 +103,27 @@ The sam deploy --guided command deploys the application through an interactive f
 
 ### HTML / CSS
 ------------------ 
-Built a simple landing page that hosts multiple links. Website is written in HTML and styled in CSS. View the website files [HERE](website)
+Built a simple landing page that hosts multiple links. (LinkedIn, GitHub etc.) Webpage is written in HTML and styled in CSS. 
+
+There is a snippet of JavaScript code in the webpage's footer section, which includes a "Visits" label and an AWS logo. The JavaScript retrieves the number of visits to the webpage by making a fetch call to the backend (an AWS Lambda API endpoint) that increments a counter and returns the current count. The count is then assigned to the "hits" span element using JavaScript:
+
+```html
+<!-- Footer -->
+  <footer class="footer">
+    <div style="text-align: center;">
+      <span style="font-size: 20px;">Visits: <span id="hits"></span></span>
+    </div>
+    <div class="aws-logo">
+      <img src="resources/images/AWSLogo.png" alt="AWS Logo" style="width: 80px; height: auto;">
+    </div>
+  </footer>
+```
+
+View the complete website files [HERE](website).
 
 ### Static S3 Website 
 ------------------
-Created a S3 bucket and enabled bucket to host a static website. Uploaded index.html and stye.css (referenced in HTML) to the bucket.
+Created a Amazon S3 bucket and enabled bucket to host a static website. Pushed the index.html and stye.css (referenced in HTML) to the bucket using the aws s3 sync command.
 
 ```yaml
 Resources:
@@ -116,9 +135,9 @@ Resources:
           IndexDocument: index.html
         BucketName: digitalden.cloud
 ```
-The given code is a CloudFormation template in YAML language that creates an Amazon S3 bucket with website hosting capability. The S3 bucket is configured to allow public read access and to serve index.html as the default document. The bucket name is set as digitalden.cloud. This template can be used to create an S3 bucket for hosting static websites.
+The given code is a CloudFormation template in YAML language that creates an S3 bucket with website hosting capability. The S3 bucket is configured to allow public read access and to serve index.html as the default document. The bucket name is set as digitalden.cloud. This template can be used to create an S3 bucket for hosting static websites.
 
-Next, you need to create an S3 bucket policy for the MyWebsite bucket resource:
+Create an S3 bucket policy for the MyWebsite bucket resource:
 
 ```yaml
   BucketPolicy:
@@ -141,7 +160,7 @@ Next, you need to create an S3 bucket policy for the MyWebsite bucket resource:
 ```
 The policy allows public read access to objects in the bucket. The policy is defined using a PolicyDocument with a Statement that grants the s3:GetObject action to all principals ("*") for the MyWebsite bucket's objects.
 
-Next, create a new directory. I called mine website and I saved my HTML AND CSS files within. 
+Create a new directory, called website and save the HTML AND CSS files within. 
 
 Push the files into the S3 Bucket:
 
