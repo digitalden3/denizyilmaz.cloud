@@ -283,7 +283,7 @@ jobs:
 
 The workflow is triggered by a push event and consists of a single job. The job checks out the code, uploads the files to the specified S3 bucket, and invalidates the CloudFront cache.
 
-![Deploy & Invalidate](resources/images/deploy-and-invalidate.png)
+![Deploy & Invalidate](website/resources/images/deploy-and-invalidate.png)
 
  The AWS access key and secret access key are obtained from GitHub secrets and are stored in Github Action Secrets rather than in code for security.
 
