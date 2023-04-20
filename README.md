@@ -175,7 +175,7 @@ aws s3 sync ./website s3://digitalden.cloud
 
 Deployed and configured a cloudfront distribution so that I can attach my domain, denizyilmaz.cloud name to the bucket. Created a resource that creates a CloudFront distribution that can be used to deliver static content from the S3 bucket to end-users with low latency and high transfer speeds.
 
-```bash
+```yaml
   MyDistribution:
     Type: "AWS::CloudFront::Distribution"
     Properties:
@@ -196,13 +196,13 @@ Deployed and configured a cloudfront distribution so that I can attach my domain
         Enabled: true
         DefaultRootObject: index.html
 ```
-This resource creates an AWS CloudFront distribution with a configuration that allows both HTTP and HTTPS connections from viewers. Requests to the S3 bucket website with the origin ID denizyilmaz.cloud.s3-website.eu-west-2.amazonaws.com are forwarded by the default cache behavior, with a default time-to-live (TTL) of 86400 seconds (24 hours).
+This resource creates an AWS CloudFront distribution with a configuration that allows both HTTP and HTTPS connections from viewers. Requests to the S3 bucket website with the origin ID digitalden.cloud.s3-website.eu-west-2.amazonaws.com are forwarded by the default cache behavior, with a default time-to-live (TTL) of 86400 seconds (24 hours).
 
 ### Route53 and DNS 
 ------------------
 Registered domain at digitalden.cloud. Configured Amazon Route 53 to route traffic to digitalden.cloud Configured a CloudFront distribution for root domain and subdomain. Updated A Records to route traffic to CloudFront distribution.
 
-```bash
+```yaml
   MyRoute53Record:
     Type: "AWS::Route53::RecordSetGroup"
     Properties:
@@ -215,26 +215,26 @@ Registered domain at digitalden.cloud. Configured Amazon Route 53 to route traff
             DNSName: !GetAtt MyDistribution.DomainName
 ```
 
-This is the CloudFormation resource that creates an Amazon Route 53 record set group. The record set group contains a single DNS record that maps the domain name denizyilmaz.cloud to the CloudFront distribution. The AliasTarget property is used to create an alias record that routes traffic to the CloudFront distribution. The HostedZoneId and DNSName properties of the CloudFront distribution are specified using the !GetAtt function.
+This is the CloudFormation resource that creates an Amazon Route 53 record set group. The record set group contains a single DNS record that maps the domain name digitalden.cloud to the CloudFront distribution. The AliasTarget property is used to create an alias record that routes traffic to the CloudFront distribution. The HostedZoneId and DNSName properties of the CloudFront distribution are specified using the !GetAtt function.
 
 ### HTTPS & ACM
 ------------------
 Secured website using HTTPS protocol. Requested Public Certificates from AWS Certificate Manager. Once certificate is created, attach to CloudFront Distribution.
 
-```bash
+```yaml
   MyCertificate:
     Type: AWS::CertificateManager::Certificate
     Properties:
       DomainName: digitalden.cloud
       ValidationMethod: DNS
 ```
-This resource creates an AWS Certificate Manager (ACM) certificate that will be issued for the domain denizyilmaz.cloud. The validation method used to prove ownership of the domain will be DNS-based validation, which requires adding a specific DNS record to the domain's DNS configuration.
+This resource creates an AWS Certificate Manager (ACM) certificate that will be issued for the domain digitalden.cloud. The validation method used to prove ownership of the domain will be DNS-based validation, which requires adding a specific DNS record to the domain's DNS configuration.
 
 After the certificate is issued and validated, it can be used to enable HTTPS connections for the CloudFront distribution. 
 
 Next, associate the certificate with the CloudFront distribution:
 
-```bash
+```yaml
         ViewerCertificate:
           AcmCertificateArn: !Ref MyCertificate
           SslSupportMethod: sni-only
