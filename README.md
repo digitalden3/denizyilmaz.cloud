@@ -49,7 +49,8 @@
 
 ### Project date
 ------------------
-16.04-2023
+16.04-2023 - Deployed by the Management Console
+TBA - Deployed by AWS SAM CLI
 
 ### Frontend Architecture
 ------------------
@@ -62,11 +63,11 @@ A simple landing page that hosts multiple links. Webpage is written in HTML/Java
 
 Registered domain at digitalden.cloud. Configured Amazon Route 53 to route traffic to digitalden.cloud. Secured website using HTTPS protocol. Configured a CloudFront distribution for root domain and subdomain.
 
-Github Actions for CI/CD. Once code is pushed to Github repository, Github Actions is triggered, which syncs all code to an S3 bucket. There is also code that invalidates the Cloudfront cache.
+Github Actions for CI/CD. Once code is pushed to Github repository, Github Actions triggered, which syncs all code to an S3 bucket. There is also code that invalidates the Cloudfront cache.
 
-The webpage includes a visitor counter in the footer that displays how many people have accessed the site. There is a JavaScript code that makes this happen. More details about this can be found in the backend repository of this project, which can be found [HERE](https://github.com/digitalden3/serverless-website-backend).
+The webpage includes a visitor counter in the footer that displays how many people have accessed the webpage. There is a JavaScript code that makes this happen. More details about this can be found in the backend repository of this project, which can be found [HERE](https://github.com/digitalden3/serverless-website-backend).
 
-(The architecture was initially deployed by using the AWS Management Console, however I recently made a [dev branch](https://github.com/digitalden3/serverless-website-frontend/tree/dev) and fully automated this architecture with AWS SAM. Once I have finalized this README. I will merge the branch with main.)
+(The architecture was initially deployed by using the AWS Management Console, however I recently made a [dev branch](https://github.com/digitalden3/serverless-website-frontend/tree/dev) and automated this architecture with AWS SAM CLI. Once I have finalized this README. I will merge the branch with main.)
 
 ### AWS SAM CLI
 ------------------
@@ -107,7 +108,7 @@ The sam deploy --guided command deploys the application through an interactive f
 ------------------ 
 Built a simple landing page that hosts multiple links. (LinkedIn, GitHub etc.) Webpage is written in HTML and styled in CSS. 
 
-There is a snippet of JavaScript code in the webpage's footer section, which includes a "Visits" label and an AWS logo. The JavaScript retrieves the number of visits to the webpage by making a fetch call to the backend (an AWS Lambda API endpoint) that increments a counter and returns the current count. The count is then assigned to the "hits" span element using JavaScript:
+There is a snippet of JavaScript code in the webpage's footer section, which includes a "Visits" label above an AWS logo. The JavaScript retrieves the number of visits to the webpage by making a fetch call to the backend (an AWS Lambda API endpoint) that increments a counter and returns the current count. The count is then assigned to the "hits" span element using JavaScript:
 
 ```html
 <!-- Footer -->
@@ -125,7 +126,7 @@ View the complete website files [HERE](website).
 
 ### Static S3 Website 
 ------------------
-Created a Amazon S3 bucket and enabled bucket to host a static website. Pushed the index.html and stye.css (referenced in HTML) to the bucket using the aws s3 sync command.
+Created a Amazon S3 bucket and enabled bucket to host a static website. Pushed the index.html and stye.css (referenced in HTML) to the bucket using the aws s3 sync command. This template can be used to create an S3 bucket for hosting static websites:
 
 ```yaml
 Resources:
@@ -137,9 +138,9 @@ Resources:
           IndexDocument: index.html
         BucketName: digitalden.cloud
 ```
-The given code is a CloudFormation template in YAML language that creates an S3 bucket with website hosting capability. The S3 bucket is configured to allow public read access and to serve index.html as the default document. The bucket name is set as digitalden.cloud. This template can be used to create an S3 bucket for hosting static websites.
+The given code is a CloudFormation resource in YAML language that creates an S3 bucket with website hosting capability. The S3 bucket is configured to allow public read access and to serve index.html as the default document. The bucket name is set as digitalden.cloud.
 
-Added an S3 bucket policy for the MyWebsite bucket resource:
+Created an S3 bucket policy for the MyWebsite bucket resource:
 
 ```yaml
   BucketPolicy:
@@ -162,9 +163,7 @@ Added an S3 bucket policy for the MyWebsite bucket resource:
 ```
 The policy allows public read access to objects in the bucket. The policy is defined using a PolicyDocument with a Statement that grants the s3:GetObject action to all principals ("*") for the MyWebsite bucket's objects.
 
-Created a new directory in the repository called website and saved the HTML AND CSS files within. 
-
-Pushed the files into the S3 Bucket:
+Created a new directory in the repository called website and saved the HTML AND CSS files within. Pushed the files into the S3 Bucket:
 
 ```bash
 aws s3 sync ./website s3://digitalden.cloud
@@ -172,8 +171,7 @@ aws s3 sync ./website s3://digitalden.cloud
 
 ### CloudFront Distribution
 ------------------
-
-Deployed and configured a cloudfront distribution so that I can attach my domain, denizyilmaz.cloud name to the bucket. Created a resource that creates a CloudFront distribution that can be used to deliver static content from the S3 bucket to end-users with low latency and high transfer speeds.
+Deployed and configured a cloudfront distribution to attach the domain, denizyilmaz.cloud name to the bucket. Created a resource that creates a CloudFront distribution that can be used to deliver static content from the S3 bucket to end-users with low latency and high transfer speeds.
 
 ```yaml
   MyDistribution:
@@ -181,26 +179,28 @@ Deployed and configured a cloudfront distribution so that I can attach my domain
     Properties:
       DistributionConfig:
         DefaultCacheBehavior:
-          ViewerProtocolPolicy: allow-all
+          ViewerProtocolPolicy: redirect-to-https
           TargetOriginId: digitalden.cloud.s3-website.eu-west-2.amazonaws.com
           DefaultTTL: 86400
           MinTTL: 1
-          MaxTTL: 86400
+          MaxTTL: 31536000
           ForwardedValues:
             QueryString: false
         Origins:
           - DomainName: digitalden.cloud.s3-website.eu-west-2.amazonaws.com
             Id: digitalden.cloud.s3-website.eu-west-2.amazonaws.com
             CustomOriginConfig:
-              OriginProtocolPolicy: match-viewer
+              OriginProtocolPolicy: http-only
         Enabled: true
         DefaultRootObject: index.html
 ```
-This resource creates an AWS CloudFront distribution with a configuration that allows both HTTP and HTTPS connections from viewers. Requests to the S3 bucket website with the origin ID digitalden.cloud.s3-website.eu-west-2.amazonaws.com are forwarded by the default cache behavior, with a default time-to-live (TTL) of 86400 seconds (24 hours).
+This resource creates an AWS CloudFront distribution with a configuration that redirects HTTP requests to HTTPS, which ensures that all traffic to digitalden.cloud is encrypted and that user data is protected. The resource has the digitalden.cloud S3 bucket set as the origin, which means that the S3 bucket is the source of the objects that the CloudFront distribution serves to clients.
+
+The default TTL for objects in the CloudFront cache is set to 24 hours, and the minimum and maximum TTLs are set to 1 second and 1 year, respectively. If your content is static and rarely changes, you may wish to set an even higher TTL value, such as 1 week or 1 month, depending on your specific requirements.
 
 ### Route53 and DNS 
 ------------------
-Registered domain at digitalden.cloud. Configured Amazon Route 53 to route traffic to digitalden.cloud Configured a CloudFront distribution for root domain and subdomain. Updated A Records to route traffic to CloudFront distribution.
+Registered domain at digitalden.cloud. Configured Amazon Route 53 to route traffic to digitalden.cloud. Updated A Records to route traffic to CloudFront distribution.
 
 ```yaml
   MyRoute53Record:
@@ -219,7 +219,7 @@ This is the CloudFormation resource that creates an Amazon Route 53 record set g
 
 ### HTTPS & ACM
 ------------------
-Secured website using HTTPS protocol. Requested Public Certificates from AWS Certificate Manager. Once certificate is created, attach to CloudFront Distribution.
+Secured website using HTTPS protocol. Requested Public Certificates from AWS Certificate Manager. Attached certificate to CloudFront Distribution.
 
 ```yaml
   MyCertificate:
@@ -228,11 +228,9 @@ Secured website using HTTPS protocol. Requested Public Certificates from AWS Cer
       DomainName: digitalden.cloud
       ValidationMethod: DNS
 ```
-This resource creates an AWS Certificate Manager (ACM) certificate that will be issued for the domain digitalden.cloud. The validation method used to prove ownership of the domain will be DNS-based validation, which requires adding a specific DNS record to the domain's DNS configuration.
+This resource creates an AWS Certificate Manager (ACM) certificate that will be issued for the domain digitalden.cloud. The validation method used to prove ownership of the domain will be DNS-based validation, which requires adding a specific DNS record to the domain's DNS configuration. After the certificate is issued and validated, it can be used to enable HTTPS connections for the CloudFront distribution. 
 
-After the certificate is issued and validated, it can be used to enable HTTPS connections for the CloudFront distribution. 
-
-Next, associate the certificate with the CloudFront distribution:
+Associate the certificate with the CloudFront distribution:
 
 ```yaml
         ViewerCertificate:
@@ -288,7 +286,8 @@ The workflow is triggered by a push event and consists of a single job. The job 
  The AWS access key and secret access key are obtained from GitHub secrets and are stored in Github Action Secrets rather than in code for security.
 
 ### Room For Growth
-This frontend was initially deployed using the management console. I then created a dev branch automated the infrastructure using SAM CLI and merged the branches together.
+This frontend was initially deployed using the management console. 
+A dev branch was then created and this architecture was deployed using SAM CLI and the branch was merged with main.
 
 ### Acknowledgements
 ------------------
