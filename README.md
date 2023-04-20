@@ -27,9 +27,11 @@
     <li><a href="#frontend-architecture">Frontend Architecture</a></li>
     <li><a href="#project-description">Project Description</a></li>
     <li><a href="#aws-sam-cli">AWS SAM CLI</a></li>  
+    <li><a href="#cloudFront-distribution">CloudFront Distribution</a></li>  
     <li><a href="#html-css">HTML / CSS</a></li>    
     <li><a href="static-s3-website">Static S3 Website </a></li>
-    <li><a href="#https-and-dns">HTTPS and DNS </a></li>
+    <li><a href="#route53-and-dns">Route53 and DNS </a></li>
+    <li><a href="#https-and-acm">HTTPS & ACM </a></li>
     <li><a href="#github-actions">Github Actions</a></li>
     <li><a href="#javascript">JavaScript</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
@@ -137,7 +139,7 @@ Resources:
 ```
 The given code is a CloudFormation template in YAML language that creates an S3 bucket with website hosting capability. The S3 bucket is configured to allow public read access and to serve index.html as the default document. The bucket name is set as digitalden.cloud. This template can be used to create an S3 bucket for hosting static websites.
 
-Create an S3 bucket policy for the MyWebsite bucket resource:
+Added an S3 bucket policy for the MyWebsite bucket resource:
 
 ```yaml
   BucketPolicy:
@@ -160,19 +162,86 @@ Create an S3 bucket policy for the MyWebsite bucket resource:
 ```
 The policy allows public read access to objects in the bucket. The policy is defined using a PolicyDocument with a Statement that grants the s3:GetObject action to all principals ("*") for the MyWebsite bucket's objects.
 
-Create a new directory, called website and save the HTML AND CSS files within. 
+Created a new directory in the repository called website and saved the HTML AND CSS files within. 
 
-Push the files into the S3 Bucket:
+Pushed the files into the S3 Bucket:
 
 ```bash
 aws s3 sync ./website s3://digitalden.cloud
 ```
 
-### HTTPS and DNS 
+### CloudFront Distribution
 ------------------
-Registered domain at digitalden.cloud. Configured Amazon Route 53 to route traffic to digitalden.cloud
 
-Secured website using HTTPS protocol. Requested Public Certificates from AWS Certificate Manager. Configured a CloudFront distribution for root domain and subdomain. Updated A Records to route traffic to CloudFront distribution.
+Deployed and configured a cloudfront distribution so that I can attach my domain, denizyilmaz.cloud name to the bucket. Created a resource that creates a CloudFront distribution that can be used to deliver static content from the S3 bucket to end-users with low latency and high transfer speeds.
+
+```bash
+  MyDistribution:
+    Type: "AWS::CloudFront::Distribution"
+    Properties:
+      DistributionConfig:
+        DefaultCacheBehavior:
+          ViewerProtocolPolicy: allow-all
+          TargetOriginId: digitalden.cloud.s3-website.eu-west-2.amazonaws.com
+          DefaultTTL: 86400
+          MinTTL: 1
+          MaxTTL: 86400
+          ForwardedValues:
+            QueryString: false
+        Origins:
+          - DomainName: digitalden.cloud.s3-website.eu-west-2.amazonaws.com
+            Id: digitalden.cloud.s3-website.eu-west-2.amazonaws.com
+            CustomOriginConfig:
+              OriginProtocolPolicy: match-viewer
+        Enabled: true
+        DefaultRootObject: index.html
+```
+This resource creates an AWS CloudFront distribution with a configuration that allows both HTTP and HTTPS connections from viewers. Requests to the S3 bucket website with the origin ID denizyilmaz.cloud.s3-website.eu-west-2.amazonaws.com are forwarded by the default cache behavior, with a default time-to-live (TTL) of 86400 seconds (24 hours).
+
+### Route53 and DNS 
+------------------
+Registered domain at digitalden.cloud. Configured Amazon Route 53 to route traffic to digitalden.cloud Configured a CloudFront distribution for root domain and subdomain. Updated A Records to route traffic to CloudFront distribution.
+
+```bash
+  MyRoute53Record:
+    Type: "AWS::Route53::RecordSetGroup"
+    Properties:
+      HostedZoneId: Z03756231E8XL64ZEK4TA
+      RecordSets:
+        - Name: digitalden.cloud
+          Type: A
+          AliasTarget:
+            HostedZoneId: Z2FDTNDATAQYW2
+            DNSName: !GetAtt MyDistribution.DomainName
+```
+
+This is the CloudFormation resource that creates an Amazon Route 53 record set group. The record set group contains a single DNS record that maps the domain name denizyilmaz.cloud to the CloudFront distribution. The AliasTarget property is used to create an alias record that routes traffic to the CloudFront distribution. The HostedZoneId and DNSName properties of the CloudFront distribution are specified using the !GetAtt function.
+
+### HTTPS & ACM
+------------------
+Secured website using HTTPS protocol. Requested Public Certificates from AWS Certificate Manager. Once certificate is created, attach to CloudFront Distribution.
+
+```bash
+  MyCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: digitalden.cloud
+      ValidationMethod: DNS
+```
+This resource creates an AWS Certificate Manager (ACM) certificate that will be issued for the domain denizyilmaz.cloud. The validation method used to prove ownership of the domain will be DNS-based validation, which requires adding a specific DNS record to the domain's DNS configuration.
+
+After the certificate is issued and validated, it can be used to enable HTTPS connections for the CloudFront distribution. 
+
+Next, associate the certificate with the CloudFront distribution:
+
+```bash
+        ViewerCertificate:
+          AcmCertificateArn: !Ref MyCertificate
+          SslSupportMethod: sni-only
+        Aliases:
+          - denizyilmaz.cloud
+```
+This resource sets the SSL/TLS certificate to be used for HTTPS connections using the AWS Certificate Manager (ACM) certificate and specifies that only the SNI protocol should be used for SSL/TLS connections. It also associates the denizyilmaz.cloud domain name with the CloudFront distribution.
 
 ### Github Actions
 ------------------
@@ -219,7 +288,7 @@ The workflow is triggered by a push event and consists of a single job. The job 
  The AWS access key and secret access key are obtained from GitHub secrets and are stored in Github Action Secrets rather than in code for security.
 
 ### Room For Growth
-Automate the architecture with IaC. AWS SAM / Terraform.
+This frontend was initially deployed using the management console. I then created a dev branch automated the infrastructure using SAM CLI and merged the branches together.
 
 ### Acknowledgements
 ------------------
