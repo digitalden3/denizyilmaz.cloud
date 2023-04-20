@@ -41,16 +41,17 @@
 ### Tech Stack
 ------------------
 - HTML/CSS
+- JavaScript
 - AWS S3
 - AWS CloudFront
-- Certificate Manager
+- Route 53
+- AWS Certificate Manager
 - GitHub Actions
-- JavaScript
 
 ### Project date
 ------------------
-16.04-2023 - Deployed by the Management Console
-TBA - Deployed by AWS SAM CLI
+- 16.04-2023 - Deployed by the Management Console
+- TBA - Deployed by AWS SAM CLI
 
 ### Frontend Architecture
 ------------------
@@ -58,14 +59,13 @@ TBA - Deployed by AWS SAM CLI
 
 ### Project Description
 ------------------
+A simple, functional landing page that hosts multiple links that direct users to external websites. Webpage is written in HTML/JavaScript and is styled in CSS.
 
-A simple landing page that hosts multiple links. Webpage is written in HTML/JavaScript and is styled in CSS.
+The webpage includes a visitor counter at the footer that displays how many people have accessed the webpage. There is a JavaScript code that makes this happen. More details about this can be found in the backend repository of this project, which can be found [HERE](https://github.com/digitalden3/serverless-website-backend).
 
-Registered domain at digitalden.cloud. Configured Amazon Route 53 to route traffic to digitalden.cloud. Secured website using HTTPS protocol. Configured a CloudFront distribution for root domain and subdomain.
+Set up a web infrastructure on AWS that includes a registered domain at digitalden.cloud, routing traffic using Amazon Route 53, HTTPS protocol for website security, CloudFront distribution for caching website content, and Github Actions for CI/CD. Domain registration gave a unique name for the website, which was then configured using Amazon Route 53 to route traffic to the domain. Secured the website with the HTTPS protocol, encrypting data between users' browsers and web server. Also set up a CloudFront distribution, which caches the website content at edge locations around the world for improved speed and reliability. 
 
-Github Actions for CI/CD. Once code is pushed to Github repository, Github Actions triggered, which syncs all code to an S3 bucket. There is also code that invalidates the Cloudfront cache.
-
-The webpage includes a visitor counter in the footer that displays how many people have accessed the webpage. There is a JavaScript code that makes this happen. More details about this can be found in the backend repository of this project, which can be found [HERE](https://github.com/digitalden3/serverless-website-backend).
+Additionally, you set up Github Actions for continuous integration and continuous deployment, which syncs code changes to an S3 bucket and invalidates the Cloudfront cache, ensuring that updated content is immediately available to users.
 
 (The architecture was initially deployed by using the AWS Management Console, however I recently made a [dev branch](https://github.com/digitalden3/serverless-website-frontend/tree/dev) and automated this architecture with AWS SAM CLI. Once I have finalized this README. I will merge the branch with main.)
 
