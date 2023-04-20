@@ -67,7 +67,9 @@ Set up a web infrastructure on AWS that includes a registered domain at digitald
 
 Additionally, you set up Github Actions for continuous integration and continuous deployment, which syncs code changes to an S3 bucket and invalidates the Cloudfront cache, ensuring that updated content is immediately available to users.
 
-(The architecture was initially deployed by using the AWS Management Console, however I recently made a [dev branch](https://github.com/digitalden3/serverless-website-frontend/tree/dev) and automated this architecture with AWS SAM CLI. Once I have finalized this README. I will merge the branch with main.)
+(The architecture was initially deployed by using the AWS Management Console, however I recently made a [dev branch](https://github.com/digitalden3/serverless-website-frontend/tree/dev) and automated this architecture with AWS SAM CLI. It is currently live on: https://denizyilmaz.cloud
+
+Next steps: Merge this branch with main. Delete the infrastructure and then deploy the SAM template under digitalden.cloud.
 
 ### AWS SAM CLI
 ------------------
@@ -286,6 +288,7 @@ The workflow is triggered by a push event and consists of a single job. The job 
  The AWS access key and secret access key are obtained from GitHub secrets and are stored in Github Action Secrets rather than in code for security.
 
 ### Room For Growth
+------------------ 
 This frontend was initially deployed using the management console. 
 A dev branch was then created and this architecture was deployed using SAM CLI and the branch was merged with main.
 
