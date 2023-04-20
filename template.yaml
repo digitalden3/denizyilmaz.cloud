@@ -47,7 +47,7 @@ Resources:
         Aliases:
           - denizyilmaz.cloud
         DefaultCacheBehavior:
-          ViewerProtocolPolicy: allow-all
+          ViewerProtocolPolicy: redirect-to-https
           TargetOriginId: denizyilmaz.cloud.s3-website-us-east-1.amazonaws.com
           DefaultTTL: 86400
           MinTTL: 1
