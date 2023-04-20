@@ -51,7 +51,7 @@ Resources:
           TargetOriginId: denizyilmaz.cloud.s3-website-us-east-1.amazonaws.com
           DefaultTTL: 86400
           MinTTL: 1
-          MaxTTL: 86400
+          MaxTTL: 31536000
           ForwardedValues:
             QueryString: false
         Origins:
