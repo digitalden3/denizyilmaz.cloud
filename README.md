@@ -63,9 +63,11 @@ A simple, functional landing page that hosts multiple links that direct users to
 
 The webpage includes a visitor counter at the footer that displays how many people have accessed the webpage. There is a JavaScript code that makes this happen. More details about this can be found in the backend repository of this project, which can be found [HERE](https://github.com/digitalden3/serverless-website-backend).
 
-Set up a web infrastructure on AWS that includes a registered domain at digitalden.cloud, routing traffic using Amazon Route 53, HTTPS protocol for website security, CloudFront distribution for caching website content, and Github Actions for CI/CD. Domain registration gave a unique name for the website, which was then configured using Amazon Route 53 to route traffic to the domain. Secured the website with the HTTPS protocol, encrypting data between users' browsers and web server. Also set up a CloudFront distribution, which caches the website content at edge locations around the world for improved speed and reliability. 
+Set up a web infrastructure on AWS that includes a registered domain at digitalden.cloud, routing traffic using Amazon Route 53, HTTPS protocol for website security, CloudFront distribution for caching website content, and Github Actions for CI/CD. D
 
-Additionally, you set up Github Actions for continuous integration and continuous deployment, which syncs code changes to an S3 bucket and invalidates the Cloudfront cache, ensuring that updated content is immediately available to users.
+omain registration gave a unique name for the website, which was then configured using Amazon Route 53 to route traffic to the domain. Secured the website with the HTTPS protocol, encrypting data between users' browsers and web server. Also set up a CloudFront distribution, which caches the website content at edge locations around the world for improved speed and reliability. 
+
+Additionally, set up Github Actions for continuous integration and continuous deployment, which syncs code changes to an S3 bucket and invalidates the Cloudfront cache, ensuring that updated content is immediately available to users.
 
 (The architecture was initially deployed by using the AWS Management Console, however I recently made a [dev branch](https://github.com/digitalden3/serverless-website-frontend/tree/dev) and automated this architecture with AWS SAM CLI. It is currently live on: https://denizyilmaz.cloud
 
@@ -108,7 +110,7 @@ The sam deploy --guided command deploys the application through an interactive f
 
 ### HTML / CSS
 ------------------ 
-Built a simple landing page that hosts multiple links. (LinkedIn, GitHub etc.) Webpage is written in HTML and styled in CSS. 
+Built a simple landing page that hosts multiple links. (LinkedIn, GitHub etc.) Webpage is written in HTML and styled in CSS. View the complete website files [HERE](website).
 
 There is a snippet of JavaScript code in the webpage's footer section, which includes a "Visits" label above an AWS logo. The JavaScript retrieves the number of visits to the webpage by making a fetch call to the backend (an AWS Lambda API endpoint) that increments a counter and returns the current count. The count is then assigned to the "hits" span element using JavaScript:
 
@@ -124,11 +126,11 @@ There is a snippet of JavaScript code in the webpage's footer section, which inc
   </footer>
 ```
 
-View the complete website files [HERE](website).
-
 ### Static S3 Website 
 ------------------
-Created a Amazon S3 bucket and enabled bucket to host a static website. Pushed the index.html and stye.css (referenced in HTML) to the bucket using the aws s3 sync command. This template can be used to create an S3 bucket for hosting static websites:
+Created a Amazon S3 bucket and enabled bucket to host a static website. Pushed the index.html and stye.css (referenced in HTML) to the bucket using the aws s3 sync command. 
+
+This template can be used to create an S3 bucket for hosting static websites:
 
 ```yaml
 Resources:
@@ -173,7 +175,7 @@ aws s3 sync ./website s3://digitalden.cloud
 
 ### CloudFront Distribution
 ------------------
-Deployed and configured a cloudfront distribution to attach the domain, denizyilmaz.cloud name to the bucket. Created a resource that creates a CloudFront distribution that can be used to deliver static content from the S3 bucket to end-users with low latency and high transfer speeds.
+Deployed and configured a cloudfront distribution to attach the domain, digitalden.cloud name to the bucket. Created a resource that creates a CloudFront distribution that can be used to deliver static content from the S3 bucket to end-users with low latency and high transfer speeds.
 
 ```yaml
   MyDistribution:
@@ -198,7 +200,7 @@ Deployed and configured a cloudfront distribution to attach the domain, denizyil
 ```
 This resource creates an AWS CloudFront distribution with a configuration that redirects HTTP requests to HTTPS, which ensures that all traffic to digitalden.cloud is encrypted and that user data is protected. The resource has the digitalden.cloud S3 bucket set as the origin, which means that the S3 bucket is the source of the objects that the CloudFront distribution serves to clients.
 
-The default TTL for objects in the CloudFront cache is set to 24 hours, and the minimum and maximum TTLs are set to 1 second and 1 year, respectively. If your content is static and rarely changes, you may wish to set an even higher TTL value, such as 1 week or 1 month, depending on your specific requirements.
+The default TTL for objects in the CloudFront cache is set to 24 hours, and the minimum and maximum TTLs are set to 1 second and 1 year, respectively. If content is static and rarely changes, you may wish to set an even higher TTL value, such as 1 week or 1 month, depending on your specific requirements.
 
 ### Route53 and DNS 
 ------------------
@@ -232,7 +234,7 @@ Secured website using HTTPS protocol. Requested Public Certificates from AWS Cer
 ```
 This resource creates an AWS Certificate Manager (ACM) certificate that will be issued for the domain digitalden.cloud. The validation method used to prove ownership of the domain will be DNS-based validation, which requires adding a specific DNS record to the domain's DNS configuration. After the certificate is issued and validated, it can be used to enable HTTPS connections for the CloudFront distribution. 
 
-Associate the certificate with the CloudFront distribution:
+This resource associates the certificate with the CloudFront distribution:
 
 ```yaml
         ViewerCertificate:
@@ -241,7 +243,7 @@ Associate the certificate with the CloudFront distribution:
         Aliases:
           - denizyilmaz.cloud
 ```
-This resource sets the SSL/TLS certificate to be used for HTTPS connections using the AWS Certificate Manager (ACM) certificate and specifies that only the SNI protocol should be used for SSL/TLS connections. It also associates the denizyilmaz.cloud domain name with the CloudFront distribution.
+This resource sets the SSL/TLS certificate to be used for HTTPS connections using the AWS Certificate Manager (ACM) certificate and specifies that only the SNI protocol should be used for SSL/TLS connections. It also associates the digitalden.cloud domain name with the CloudFront distribution.
 
 ### Github Actions
 ------------------
