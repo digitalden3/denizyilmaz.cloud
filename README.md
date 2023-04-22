@@ -108,7 +108,7 @@ sam deploy --guided
 
 The sam deploy --guided command deploys the application through an interactive flow. The AWS SAM CLI guides you through configuring the application's deployment settings, transforming the template into AWS CloudFormation, and deploying to AWS CloudFormation to create the resources.
 
-### HTML / CSS
+### HTML and CSS
 ------------------ 
 Built a simple landing page that hosts multiple links. (LinkedIn, GitHub etc.) Webpage is written in HTML and styled in CSS. View the complete website files [HERE](website).
 
