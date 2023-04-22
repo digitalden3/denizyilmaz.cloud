@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="img/">
-    <img src="website/resources/images/AWS-Architecture-2.png" alt="architecture">
+    <img src="website/resources/images/digitalden.cloud-full-architecture.png" alt="architecture">
   </a>
   <h1 align="center">A Serverless Website</h1>
   <p align="center">
@@ -28,12 +28,12 @@
     <li><a href="#project-description">Project Description</a></li>
     <li><a href="#aws-sam-cli">AWS SAM CLI</a></li>  
     <li><a href="#cloudFront-distribution">CloudFront Distribution</a></li>  
-    <li><a href="#html-css">HTML / CSS</a></li>    
-    <li><a href="static-s3-website">Static S3 Website </a></li>
+    <li><a href="#html-and-css">HTML and CSS</a></li>    
+    <li><a href="#static-s3-website">Static S3 Website </a></li>
     <li><a href="#route53-and-dns">Route53 and DNS </a></li>
-    <li><a href="#https-and-acm">HTTPS & ACM </a></li>
+    <li><a href="#https-and-acm">HTTPS and ACM </a></li>
     <li><a href="#github-actions">Github Actions</a></li>
-    <li><a href="#javascript">JavaScript</a></li>
+    <li><a href="#room-for-growth">Room For Growth</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
@@ -221,7 +221,7 @@ Registered domain at digitalden.cloud. Configured Amazon Route 53 to route traff
 
 This is the CloudFormation resource that creates an Amazon Route 53 record set group. The record set group contains a single DNS record that maps the domain name digitalden.cloud to the CloudFront distribution. The AliasTarget property is used to create an alias record that routes traffic to the CloudFront distribution. The HostedZoneId and DNSName properties of the CloudFront distribution are specified using the !GetAtt function.
 
-### HTTPS & ACM
+### HTTPS and ACM
 ------------------
 Secured website using HTTPS protocol. Requested Public Certificates from AWS Certificate Manager. Attached certificate to CloudFront Distribution.
 
