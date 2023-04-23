@@ -6,7 +6,7 @@
   </a>
   <h1 align="center">A Serverless Website</h1>
   <p align="center">
-    This project was built on AWS and has a CI/CD pipeline on GitHub Actions workflow.
+    Built on AWS using AWS SAM CLI for IaC and GitHub Actions for CI/CD.
      <br />
     This is the front-end repo to the website:
     <br />
@@ -59,15 +59,15 @@
 
 ### Project Description
 ------------------
-A simple, functional landing page that hosts multiple links that direct users to external websites. Webpage is written in HTML/JavaScript and is styled in CSS.
+A simple, functional webpage that hosts multiple links that direct users to external websites. Webpage is written in HTML/JavaScript and is styled in CSS.
 
-The webpage includes a visitor counter at the footer that displays how many people have accessed the webpage. There is a JavaScript code that makes this happen. More details about this can be found in the backend repository of this project, which can be found [HERE](https://github.com/digitalden3/serverless-website-backend).
+The webpage includes a site visitor counter at the footer that displays how many people have accessed the webpage. AWS API Gateway, Lambda Functions, DynamoDB and JavaScript code makes this happen. More details about this can be found in the backend repository of this project, which can be found [HERE](https://github.com/digitalden3/serverless-website-backend).
 
-Set up a web infrastructure on AWS that includes a registered domain at digitalden.cloud, routing traffic using Amazon Route 53, HTTPS protocol for website security, CloudFront distribution for caching website content, and Github Actions for CI/CD. D
+The frontend sets up a web infrastructure on AWS that includes a registered domain at digitalden.cloud, routing traffic using Amazon Route 53, HTTPS protocol for website security, CloudFront distribution for caching website content, and Github Actions for CI/CD. 
 
-omain registration gave a unique name for the website, which was then configured using Amazon Route 53 to route traffic to the domain. Secured the website with the HTTPS protocol, encrypting data between users' browsers and web server. Also set up a CloudFront distribution, which caches the website content at edge locations around the world for improved speed and reliability. 
+Domain registration gives a unique name for the webpage, which was then configured using Amazon Route 53 to route traffic to the domain. The webpage is secured with the HTTPS protocol, encrypting data between users' browsers and web server. A CloudFront distribution is configured, which caches the webpages content at edge locations around the world for improved speed and reliability. 
 
-Additionally, set up Github Actions for continuous integration and continuous deployment, which syncs code changes to an S3 bucket and invalidates the Cloudfront cache, ensuring that updated content is immediately available to users.
+GitHub Actions is configured for continuous integration and continuous deployment, which syncs code changes to an S3 bucket and invalidates the Cloudfront cache, ensuring that updated content is immediately available to users.
 
 (The architecture was initially deployed by using the AWS Management Console, however I recently made a [dev branch](https://github.com/digitalden3/serverless-website-frontend/tree/dev) and automated this architecture with AWS SAM CLI. It is currently live on: https://denizyilmaz.cloud
 
