@@ -40,6 +40,7 @@ Resources:
       DistributionConfig:
         ViewerCertificate:
           AcmCertificateArn: !Ref MyCertificate
+          MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
         Aliases:
           - denizyilmaz.cloud
