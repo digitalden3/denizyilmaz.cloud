@@ -159,6 +159,13 @@ body {
   color: #ffffff;
 }
 
+.wrapper .CV:hover,
+.wrapper .CV:hover .tooltip,
+.wrapper .CV:hover .tooltip::before {
+  background-color: #8e8d8d;
+  color: #ffffff;
+}
+
 .footer {
 	position: absolute;
 	left: 0;
