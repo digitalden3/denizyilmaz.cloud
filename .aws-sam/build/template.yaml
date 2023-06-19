@@ -11,16 +11,20 @@ Resources:
   MyWebsite:
     Type: AWS::S3::Bucket
     Properties:
-      AccessControl: PublicRead
+      BucketName: digitalden.cloud
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+      OwnershipControls:
+        Rules:
+        - ObjectOwnership: ObjectWriter
       WebsiteConfiguration:
         IndexDocument: index.html
-      BucketName: denizyilmaz.cloud
   MyRoute53Record:
     Type: AWS::Route53::RecordSetGroup
     Properties:
       HostedZoneId: Z03756231E8XL64ZEK4TA
       RecordSets:
-      - Name: denizyilmaz.cloud
+      - Name: digitalden.cloud
         Type: A
         AliasTarget:
           HostedZoneId: Z2FDTNDATAQYW2
@@ -31,7 +35,7 @@ Resources:
   MyCertificate:
     Type: AWS::CertificateManager::Certificate
     Properties:
-      DomainName: denizyilmaz.cloud
+      DomainName: digitalden.cloud
       ValidationMethod: DNS
   MyDistribution:
     Type: AWS::CloudFront::Distribution
@@ -43,18 +47,18 @@ Resources:
           MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
         Aliases:
-        - denizyilmaz.cloud
+        - digitalden.cloud
         DefaultCacheBehavior:
           ViewerProtocolPolicy: redirect-to-https
-          TargetOriginId: denizyilmaz.cloud.s3-website-us-east-1.amazonaws.com
+          TargetOriginId: digitalden.cloud.s3-website-us-east-1.amazonaws.com
           DefaultTTL: 86400
           MinTTL: 1
           MaxTTL: 31536000
           ForwardedValues:
             QueryString: false
         Origins:
-        - DomainName: denizyilmaz.cloud.s3-website-us-east-1.amazonaws.com
-          Id: denizyilmaz.cloud.s3-website-us-east-1.amazonaws.com
+        - DomainName: digitalden.cloud.s3-website-us-east-1.amazonaws.com
+          Id: digitalden.cloud.s3-website-us-east-1.amazonaws.com
           CustomOriginConfig:
             OriginProtocolPolicy: http-only
         Enabled: true

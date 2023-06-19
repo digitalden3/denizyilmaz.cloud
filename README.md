@@ -1,11 +1,9 @@
 <br />
 
-<p align="center">
-  <a href="img/">
-    <img src="website/resources/images/digitalden.cloud-full-architecture.png" alt="architecture">
-  </a>
+![Architecture Diagram](website/resources/images/AWS-Architecture-2.png)
   <h1 align="center">A Serverless Website</h1>
   <p align="center">
+  <br />
     Built on AWS using AWS SAM CLI for IaC and GitHub Actions for CI/CD.
      <br />
     This is the front-end repo to the website:
@@ -26,6 +24,7 @@
     </li>
     <li><a href="#frontend-architecture">Frontend Architecture</a></li>
     <li><a href="#project-description">Project Description</a></li>
+    <li><a href="#infrastructure-migration">Infrastructure Migration </a></li>
     <li><a href="#aws-sam-cli">AWS SAM CLI</a></li>  
     <li><a href="#cloudFront-distribution">CloudFront Distribution</a></li>  
     <li><a href="#html-and-css">HTML and CSS</a></li>    
@@ -50,8 +49,8 @@
 
 ### Project date
 ------------------
-- 16.04-2023 - Deployed by the Management Console
-- TBA - Deployed by AWS SAM CLI
+- 16.04.2023 - Deployed via Management Console
+- 19.06.2023 - Deployed via AWS SAM CLI (IaC)
 
 ### Frontend Architecture
 ------------------
@@ -69,9 +68,43 @@ Domain registration gives a unique name for the webpage, which was then configur
 
 GitHub Actions is configured for continuous integration and continuous deployment, which syncs code changes to an S3 bucket and invalidates the Cloudfront cache, ensuring that updated content is immediately available to users.
 
-(The architecture was initially deployed by using the AWS Management Console, however I recently made a [dev branch](https://github.com/digitalden3/serverless-website-frontend/tree/dev) and automated this architecture with AWS SAM CLI. It is currently live on: https://denizyilmaz.cloud
+### Infrastructure Migration
+------------------
+By following the steps below, I successfully migrated my infrastructure from the AWS Management Console's manual deployment to an Infrastructure as Code approach using AWS SAM. Additionally, I updated the YAML template to incorporate the necessary changes for the new security configuration of Amazon S3, ensuring that your buckets had the desired access control settings. Testing the changes on a separate domain allowed me to validate the updated configuration before applying it to your production environment.
 
-Next steps: Merge this branch with main. Delete the infrastructure and then deploy the SAM template under digitalden.cloud.
+1. Initial Infrastructure Deployment:
+I initially deployed my infrastructure on AWS using the AWS Management Console. This involved manually configuring and provisioning all the necessary AWS resources for my serverless website.
+
+2. Infrastructure as Code Migration with AWS SAM:
+I transitioned my infrastructure to Infrastructure as Code, I decided to use AWS SAM. I created a new branch, named "dev," in my Git repository to work on the migration process. With AWS SAM CLI, I initialized a new AWS SAM project in the "dev" branch's directory. This step generated the project structure and necessary files for managing my infrastructure as code.
+
+3. YAML Template Creation:
+Using AWS SAM, I consolidated the required AWS resources and their configurations into a YAML template. This template acts as a blueprint for my infrastructure, defining the desired state of your AWS resources. The YAML template includes resource definitions such as an S3 Bucket, Route53 records, ACM Certificates, CloudFront Distribution and a Bucket Policy for my serverless website.
+
+Additionally, I updated the YAML template by setting the "BlockPublicAcls" property to "false" for the S3 buckets. This was necessary due to a change in default security configuration by Amazon S3, starting from April 2023. Enabling this property ensured that S3 Block Public Access was disabled for the new buckets.
+
+4. Testing on a Separate Domain:
+Before merging the branches and applying the changes to my production environment, I tested the AWS SAM template on a separate domain, denizyilmaz.cloud. This allowed me to validate the functionality and ensure that the infrastructure was provisioned correctly.
+
+This also allowed me to verify that the infrastructure was provisioned correctly and that the "BlockPublicAcls" property was functioning as intended.
+
+5. Branch Merge and Cleanup:
+Once I was satisfied with the test deployment, I merged the "dev" branch, containing the AWS SAM changes, back into the main branch. This consolidated all the changes made during the migration process 
+
+I then deleted the infrastructure that was originally deployed through the AWS Management Console. This ensured a clean transition from the previous infrastructure to the new infrastructure defined by the AWS SAM template. However, due to the caching behavior of the CloudFront distribution associated with my website, my website remained accessible for a certain period of time. This was because CloudFront caches content for a specified Time-to-Live (TTL), and the TTL for my website was set to 24 hours.
+
+6. AWS SAM Deployment:
+With the changes merged and the old infrastructure removed, I proceeded to deploy the updated AWS SAM template using the AWS SAM CLI. This initiated the creation of the new infrastructure based on the YAML template, which included the necessary "BlockPublicAcls" property update.
+
+7. Website Deployment:
+After the AWS SAM deployment completed successfully, my serverless website became live under the domain specified in the AWS SAM template (in this case, "digitalden.cloud").
+
+8. Changing Bucket Region and Error:
+After deleting the original infrastructure, I attempted to create a new bucket in the "us-east-1" region with the same name as the previously deleted bucket.
+
+However, I encountered a "400 Bad Request" error. This error occurred due to a delay in propagating the availability of a bucket name across all regions. When you delete a bucket in one region, there is a delay before the name becomes available for use in all other regions. Therefore, attempting to create a bucket with the same name in a different region immediately after deletion resulted in this type of error.
+
+To resolve the error, I needed to wait for the bucket name to become available in the "us-east-1" region. Once the name was no longer associated with the deleted bucket, I could successfully create the bucket in the desired region.
 
 ### AWS SAM CLI
 ------------------
@@ -110,7 +143,7 @@ The sam deploy --guided command deploys the application through an interactive f
 
 ### HTML and CSS
 ------------------ 
-Built a simple landing page that hosts multiple links. (LinkedIn, GitHub etc.) Webpage is written in HTML and styled in CSS. View the complete website files [HERE](website).
+Built a simple landing page that hosts multiple external links. (LinkedIn, GitHub etc.) Webpage is written in HTML and styled in CSS. View the complete website files [HERE](website).
 
 There is a snippet of JavaScript code in the webpage's footer section, which includes a "Visits" label above an AWS logo. The JavaScript retrieves the number of visits to the webpage by making a fetch call to the backend (an AWS Lambda API endpoint) that increments a counter and returns the current count. The count is then assigned to the "hits" span element using JavaScript:
 
@@ -137,10 +170,17 @@ Resources:
   MyWebsite:
       Type: AWS::S3::Bucket
       Properties:
-        AccessControl: PublicRead
+        BucketName: digitalden.cloud
+        ### No more AccessControl
+        # AccessControl: PublicRead
+        ###  replace it with...
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+        OwnershipControls:
+          Rules:
+            - ObjectOwnership: ObjectWriter
         WebsiteConfiguration:
           IndexDocument: index.html
-        BucketName: digitalden.cloud
 ```
 The given code is a CloudFormation resource in YAML language that creates an S3 bucket with website hosting capability. The S3 bucket is configured to allow public read access and to serve index.html as the default document. The bucket name is set as digitalden.cloud.
 
@@ -241,7 +281,7 @@ This resource associates the certificate with the CloudFront distribution:
           AcmCertificateArn: !Ref MyCertificate
           SslSupportMethod: sni-only
         Aliases:
-          - denizyilmaz.cloud
+          - digitalden.cloud
 ```
 This resource sets the SSL/TLS certificate to be used for HTTPS connections using the AWS Certificate Manager (ACM) certificate and specifies that only the SNI protocol should be used for SSL/TLS connections. It also associates the digitalden.cloud domain name with the CloudFront distribution.
 
@@ -267,7 +307,7 @@ jobs:
         args: --exclude '.git*/*' --delete --follow-symlinks
       env:
         SOURCE_DIR: './'
-        AWS_REGION: 'eu-west-2'
+        AWS_REGION: 'us-east-1'
         AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -278,7 +318,7 @@ jobs:
       env:
         DISTRIBUTION: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
         PATHS: '/*'
-        AWS_REGION: 'eu-west-2'
+        AWS_REGION: 'us-east-1'
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
  ```
@@ -291,8 +331,7 @@ The workflow is triggered by a push event and consists of a single job. The job 
 
 ### Room For Growth
 ------------------ 
-This frontend was initially deployed using the management console. 
-A dev branch was then created and this architecture was deployed using SAM CLI and the branch was merged with main.
+Deploy the Infrastructure via Terraform
 
 ### Acknowledgements
 ------------------
