@@ -27,7 +27,7 @@ Resources:
   MyRoute53Record:
     Type: "AWS::Route53::RecordSetGroup"
     Properties:
-      HostedZoneId: Z03756231E8XL64ZEK4TA
+      HostedZoneId: Z0634262R2PIF9U1B08B
       RecordSets:
         - Name: digitalden.cloud
           Type: A
