@@ -70,36 +70,36 @@ GitHub Actions is configured for continuous integration and continuous deploymen
 
 ### Infrastructure Migration
 ------------------
-By following the steps below, I successfully migrated my infrastructure from the AWS Management Console's manual deployment to an Infrastructure as Code approach using AWS SAM. Additionally, I updated the YAML template to incorporate the necessary changes for the new security configuration of Amazon S3, ensuring that your buckets had the desired access control settings. Testing the changes on a separate domain allowed me to validate the updated configuration before applying it to your production environment.
+By following the steps below, I successfully migrated my infrastructure from the AWS Management Console's manual deployment to an Infrastructure as Code approach using AWS SAM. Additionally, I updated the YAML template to incorporate the necessary changes for the new security configuration of Amazon S3, ensuring that my buckets had the desired access control settings. Testing the changes on a separate domain allowed me to validate the updated configuration before applying it to your production environment.
 
-1. Initial Infrastructure Deployment:
+**Initial Infrastructure Deployment:**
 I initially deployed my infrastructure on AWS using the AWS Management Console. This involved manually configuring and provisioning all the necessary AWS resources for my serverless website.
 
-2. Infrastructure as Code Migration with AWS SAM:
+**Infrastructure as Code Migration with AWS SAM:**
 I transitioned my infrastructure to Infrastructure as Code, I decided to use AWS SAM. I created a new branch, named "dev," in my Git repository to work on the migration process. With AWS SAM CLI, I initialized a new AWS SAM project in the "dev" branch's directory. This step generated the project structure and necessary files for managing my infrastructure as code.
 
-3. YAML Template Creation:
+**YAML Template Creation:**
 Using AWS SAM, I consolidated the required AWS resources and their configurations into a YAML template. This template acts as a blueprint for my infrastructure, defining the desired state of your AWS resources. The YAML template includes resource definitions such as an S3 Bucket, Route53 records, ACM Certificates, CloudFront Distribution and a Bucket Policy for my serverless website.
 
 Additionally, I updated the YAML template by setting the "BlockPublicAcls" property to "false" for the S3 buckets. This was necessary due to a change in default security configuration by Amazon S3, starting from April 2023. Enabling this property ensured that S3 Block Public Access was disabled for the new buckets.
 
-4. Testing on a Separate Domain:
+**Testing on a Separate Domain:**
 Before merging the branches and applying the changes to my production environment, I tested the AWS SAM template on a separate domain, denizyilmaz.cloud. This allowed me to validate the functionality and ensure that the infrastructure was provisioned correctly.
 
 This also allowed me to verify that the infrastructure was provisioned correctly and that the "BlockPublicAcls" property was functioning as intended.
 
-5. Branch Merge and Cleanup:
+**Branch Merge and Cleanup:**
 Once I was satisfied with the test deployment, I merged the "dev" branch, containing the AWS SAM changes, back into the main branch. This consolidated all the changes made during the migration process 
 
 I then deleted the infrastructure that was originally deployed through the AWS Management Console. This ensured a clean transition from the previous infrastructure to the new infrastructure defined by the AWS SAM template. However, due to the caching behavior of the CloudFront distribution associated with my website, my website remained accessible for a certain period of time. This was because CloudFront caches content for a specified Time-to-Live (TTL), and the TTL for my website was set to 24 hours.
 
-6. AWS SAM Deployment:
+**AWS SAM Deployment:**
 With the changes merged and the old infrastructure removed, I proceeded to deploy the updated AWS SAM template using the AWS SAM CLI. This initiated the creation of the new infrastructure based on the YAML template, which included the necessary "BlockPublicAcls" property update.
 
-7. Website Deployment:
+**Website Deployment:**
 After the AWS SAM deployment completed successfully, my serverless website became live under the domain specified in the AWS SAM template (in this case, "digitalden.cloud").
 
-8. Changing Bucket Region and Error:
+C**hanging Bucket Region and Error:**
 After deleting the original infrastructure, I attempted to create a new bucket in the "us-east-1" region with the same name as the previously deleted bucket.
 
 However, I encountered a "400 Bad Request" error. This error occurred due to a delay in propagating the availability of a bucket name across all regions. When you delete a bucket in one region, there is a delay before the name becomes available for use in all other regions. Therefore, attempting to create a bucket with the same name in a different region immediately after deletion resulted in this type of error.
