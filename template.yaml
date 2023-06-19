@@ -12,10 +12,18 @@ Resources:
   MyWebsite:
       Type: AWS::S3::Bucket
       Properties:
-        AccessControl: PublicRead
+        BucketName: denizyilmaz.cloud
+        ### No more AccessControl
+        # AccessControl: PublicRead
+        ###  replace it with...
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+        OwnershipControls:
+          Rules:
+            - ObjectOwnership: ObjectWriter
         WebsiteConfiguration:
           IndexDocument: index.html
-        BucketName: denizyilmaz.cloud
+        ###
 
   MyRoute53Record:
     Type: "AWS::Route53::RecordSetGroup"
