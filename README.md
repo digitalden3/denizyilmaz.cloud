@@ -104,6 +104,8 @@ By following the steps below, I successfully migrated my infrastructure from the
 
 * To resolve the error, I needed to wait for the bucket name to become available in the "us-east-1" region. Once the name was no longer associated with the deleted bucket, I could successfully create the bucket in the desired region.
 
+![SAM](website/resources/images/awssam.png)
+
 ### AWS SAM CLI
 ------------------
 The SAM CLI is a command line tool that used with AWS SAM templates to build and run serverless applications. It adds functionality for building and testing Lambda applications. It uses Docker to run the functions in an Amazon Linux environment that matches Lambda. It can also emulate the application's build environment and API.
